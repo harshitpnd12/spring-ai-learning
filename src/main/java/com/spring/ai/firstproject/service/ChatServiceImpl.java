@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +15,8 @@ public class ChatServiceImpl implements ChatService {
 
     private ChatClient chatClient;
 
-    public ChatServiceImpl(ChatClient.Builder builder) {
-        this.chatClient = builder.build();
+    public ChatServiceImpl(ChatClient chatClient) {
+        this.chatClient = chatClient;
     }
 
     @Override
@@ -27,18 +28,36 @@ public class ChatServiceImpl implements ChatService {
         // .call()
         // .content();
 
+        // Prompt prompt1 = new Prompt(query);
+
+        // var content = chatClient
+        // .prompt(prompt1)
+        // .call()
+        // .chatResponse()
+        // .getResult()
+        // .getOutput()
+        // .getText();
+
+        // Prompt prompt1 = new Prompt(query, OpenAiChatOptions.builder()
+        // .model("openai/gpt-oss-120b:free")
+        // .temperature(0.2)
+        // .maxTokens(100)
+        // .build());
+
         Prompt prompt1 = new Prompt(query);
 
-        var content = chatClient
-                .prompt(prompt1)
-                .call()
-                .chatResponse()
-                .getResult()
-                .getOutput()
-                .getText();
+        try {
+            return chatClient
+                    .prompt(prompt1)
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "AI service is temporarily unavailable. Please try again later." + e;
+        }
 
-        System.out.println(content);
-        return content;
+        // System.out.println(content);
+        // return content;
 
     }
 

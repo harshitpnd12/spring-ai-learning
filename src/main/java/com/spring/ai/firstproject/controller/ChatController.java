@@ -50,4 +50,9 @@ public class ChatController {
     public ResponseEntity<List<Tut>> chatTut(@RequestParam(value = "q", required = true) String q) {
         return ResponseEntity.ok(chatService.chatTut(q));
     }
+
+    @GetMapping("/chatstreaming")
+    public ResponseEntity<String> chatStreaming(@RequestParam(value = "q", required = true) String q) {
+        return ResponseEntity.ok(chatService.chat(q));
+    }
 }
