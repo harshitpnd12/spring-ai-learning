@@ -8,23 +8,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.ai.firstproject.service.ChatService;
+import com.spring.ai.firstproject.service.ChatServiceImpl;
+
 @RestController
 @RequestMapping
 public class ChatController {
 
-    private ChatClient openAiChatClient;
+    // private ChatClient openAiChatClient;
 
-    public ChatController(@Qualifier("openAiChatClient") ChatClient openAiChatClient) {
-        this.openAiChatClient = openAiChatClient;
-    }
+    // public ChatController(@Qualifier("openAiChatClient") ChatClient
+    // openAiChatClient) {
+    // this.openAiChatClient = openAiChatClient;
+    // }
 
     // public ChatController(ChatClient.Builder builder) {
     // this.chatClient = builder.build();
     // }
 
+    private ChatService chatService;
+
+    public ChatController(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
     @GetMapping("/chat")
     public ResponseEntity<String> chat(@RequestParam(value = "q", required = true) String q) {
-        var resultResp = openAiChatClient.prompt(q).call().content();
-        return ResponseEntity.ok(resultResp);
+        return ResponseEntity.ok(chatService.chat(q));
     }
+    // @GetMapping("/chat")
+    // public ResponseEntity<String> chat(@RequestParam(value = "q", required =
+    // true) String q) {
+    // var resultResp = openAiChatClient.prompt(q).call().content();
+    // return ResponseEntity.ok(resultResp);
+    // }
 }
