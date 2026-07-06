@@ -1,8 +1,13 @@
 package com.spring.ai.firstproject.service;
 
+import java.util.List;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+
+import com.spring.ai.firstproject.entity.Tut;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -34,6 +39,20 @@ public class ChatServiceImpl implements ChatService {
 
         System.out.println(content);
         return content;
+
+    }
+
+    @Override
+    public List<Tut> chatTut(String query) {
+        Prompt prompt1 = new Prompt(query);
+
+        List<Tut> tutorial = chatClient
+                .prompt(prompt1)
+                .call()
+                .entity(new ParameterizedTypeReference<List<Tut>>() {
+
+                });
+        return tutorial;
     }
 
 }
