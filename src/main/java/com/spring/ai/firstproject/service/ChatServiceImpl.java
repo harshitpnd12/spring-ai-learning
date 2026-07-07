@@ -1,9 +1,11 @@
 package com.spring.ai.firstproject.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -46,9 +48,12 @@ public class ChatServiceImpl implements ChatService {
 
         Prompt prompt1 = new Prompt(query);
 
+        String queryStr = "As an expert in coding and programming. Always write program in java. Now reply for this question :{query}";
+
         try {
             return chatClient
-                    .prompt(prompt1)
+                    .prompt()
+                    .user(u -> u.text(queryStr).param("query", query))
                     .call()
                     .content();
         } catch (Exception e) {
@@ -72,6 +77,33 @@ public class ChatServiceImpl implements ChatService {
 
                 });
         return tutorial;
+    }
+
+    public String chatTemplate() {
+        // first step Prompt template
+        // PromptTemplate strTemplate = PromptTemplate
+        // .builder()
+        // .template("what is {techname}? tell me example of {exampleName} in 30 words")
+        // .build();
+
+        // // Second Step Render
+        // String renderMessage = strTemplate.render(Map.of(
+        // "techname", "spring",
+        // "exampleName", "spring Boot"));
+
+        // // third Step
+        // Prompt prompt = new Prompt(renderMessage);
+
+        // // Fourth Step
+        // try {
+        // return this.chatClient
+        // .prompt(prompt)
+        // .call()
+        // .content();
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // return "AI service is temporarily unavailable. Error: " + e.getMessage();
+        // }
     }
 
 }

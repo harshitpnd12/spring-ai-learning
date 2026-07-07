@@ -55,4 +55,9 @@ public class ChatController {
     public ResponseEntity<String> chatStreaming(@RequestParam(value = "q", required = true) String q) {
         return ResponseEntity.ok(chatService.chat(q));
     }
+
+    @GetMapping("/chattemplate")
+    public ResponseEntity<String> chatTemplate() {
+        return ResponseEntity.ok(chatService.chatTemplate());
+    }
 }

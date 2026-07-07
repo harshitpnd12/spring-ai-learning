@@ -9,4 +9,6 @@ public interface ChatService {
     String chat(String query);
 
     List<Tut> chatTut(String query);
+
+    String chatTemplate();
 }
