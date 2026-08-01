@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -94,16 +95,44 @@ public class ChatServiceImpl implements ChatService {
         // // third Step
         // Prompt prompt = new Prompt(renderMessage);
 
-        // // Fourth Step
-        // try {
-        // return this.chatClient
-        // .prompt(prompt)
-        // .call()
-        // .content();
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // return "AI service is temporarily unavailable. Error: " + e.getMessage();
-        // }
+        var systemPromptTemplate = SystemPromptTemplate.builder()
+                .template("You are a helpful coding assitant.You are an expert in coding.")
+                .build();
+
+        var systemMessage = systemPromptTemplate.createMessage();
+
+        var userPromptTemplate = PromptTemplate
+                .builder()
+                .template("what is {techname}? tell me example of {exampleName} in 100 words")
+                .build();
+
+        var userMessage = userPromptTemplate.createMessage(Map.of(
+                "techname", "spring",
+                "exampleName", "spring exception"));
+
+        Prompt prompt = new Prompt(systemMessage, userMessage);
+
+        // Fourth Step
+        try {
+            String response = this.chatClient
+                    .prompt(prompt)
+                    .call()
+                    .content();
+
+            System.out.println(response == null);
+            System.out.println("Length: " + (response == null ? 0 : response.length()));
+
+            System.out.println("Response: " + response);
+
+            return response;
+            // return this.chatClient
+            // .prompt(prompt)
+            // .call()
+            // .content();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Chat Template AI service Band h. Error: " + e.getMessage();
+        }
     }
 
 }
