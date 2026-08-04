@@ -8,7 +8,9 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import com.spring.ai.firstproject.entity.Tut;
@@ -95,44 +97,64 @@ public class ChatServiceImpl implements ChatService {
         // // third Step
         // Prompt prompt = new Prompt(renderMessage);
 
-        var systemPromptTemplate = SystemPromptTemplate.builder()
-                .template("You are a helpful coding assitant.You are an expert in coding.")
-                .build();
+        // var systemPromptTemplate = SystemPromptTemplate.builder()
+        // .template("You are a helpful coding assitant.You are an expert in coding.")
+        // .build();
 
-        var systemMessage = systemPromptTemplate.createMessage();
+        // var systemMessage = systemPromptTemplate.createMessage();
 
-        var userPromptTemplate = PromptTemplate
-                .builder()
-                .template("what is {techname}? tell me example of {exampleName} in 100 words")
-                .build();
+        // var userPromptTemplate = PromptTemplate
+        // .builder()
+        // .template("what is {techname}? tell me example of {exampleName} in 100
+        // words")
+        // .build();
 
-        var userMessage = userPromptTemplate.createMessage(Map.of(
-                "techname", "spring",
-                "exampleName", "spring exception"));
+        // var userMessage = userPromptTemplate.createMessage(Map.of(
+        // "techname", "spring",
+        // "exampleName", "spring exception"));
 
-        Prompt prompt = new Prompt(systemMessage, userMessage);
+        // Prompt prompt = new Prompt(systemMessage, userMessage);
 
-        // Fourth Step
-        try {
-            String response = this.chatClient
-                    .prompt(prompt)
-                    .call()
-                    .content();
+        // // Fourth Step
+        // try {
+        // return this.chatClient
+        // .prompt(prompt)
+        // .call()
+        // .content();
+        // // return this.chatClient
+        // // .prompt(prompt)
+        // // .call()
+        // // .content();
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // return "Chat Template AI service Band h. Error: " + e.getMessage();
+        // }
 
-            System.out.println(response == null);
-            System.out.println("Length: " + (response == null ? 0 : response.length()));
+        // this method using fluent api
 
-            System.out.println("Response: " + response);
+        return this.chatClient
+                .prompt()
+                .system(system -> system.text("You are a helpful coding assitant.You are an expert in coding."))
+                .user(user -> user.text("what is {techname}? tell me example of {exampleName}")
+                        .param("techname", "spring")
+                        .param("exampleName", "spring exception"))
+                .call()
+                .content();
+    }
 
-            return response;
-            // return this.chatClient
-            // .prompt(prompt)
-            // .call()
-            // .content();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Chat Template AI service Band h. Error: " + e.getMessage();
-        }
+    @Value("classpath:/prompt/user-message.st")
+    private Resource userMessage;
+
+    @Value("classpath:/prompt/system-prompt.st")
+    private Resource systemMessage;
+
+    public String promptUsingFile() {
+        return this.chatClient
+                .prompt()
+                .system(system -> system.text(this.systemMessage))
+                .user(user -> user.text(this.userMessage).param("concept", "java iteration"))
+                .call()
+                .content();
     }
 
 }

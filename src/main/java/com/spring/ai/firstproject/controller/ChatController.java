@@ -60,4 +60,9 @@ public class ChatController {
     public ResponseEntity<String> chatTemplate() {
         return ResponseEntity.ok(chatService.chatTemplate());
     }
+
+    @GetMapping("/promptusingfile")
+    public ResponseEntity<String> promptUsingFile() {
+        return ResponseEntity.ok(chatService.promptUsingFile());
+    }
 }

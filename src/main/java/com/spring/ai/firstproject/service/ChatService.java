@@ -11,4 +11,6 @@ public interface ChatService {
     List<Tut> chatTut(String query);
 
     String chatTemplate();
+
+    String promptUsingFile();
 }
