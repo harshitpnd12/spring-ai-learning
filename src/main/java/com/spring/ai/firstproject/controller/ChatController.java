@@ -65,4 +65,10 @@ public class ChatController {
     public ResponseEntity<String> promptUsingFile() {
         return ResponseEntity.ok(chatService.promptUsingFile());
     }
+
+    // Advisor
+    @GetMapping("/chatadvisor")
+    public ResponseEntity<String> chatAdvisor(@RequestParam(value = "q", required = true) String q) {
+        return ResponseEntity.ok(chatService.chatAdvisor(q));
+    }
 }

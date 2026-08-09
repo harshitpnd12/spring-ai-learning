@@ -13,4 +13,6 @@ public interface ChatService {
     String chatTemplate();
 
     String promptUsingFile();
+
+    String chatAdvisor(String query);
 }

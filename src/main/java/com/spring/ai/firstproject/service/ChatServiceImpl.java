@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -153,6 +154,16 @@ public class ChatServiceImpl implements ChatService {
                 .prompt()
                 .system(system -> system.text(this.systemMessage))
                 .user(user -> user.text(this.userMessage).param("concept", "java iteration"))
+                .call()
+                .content();
+    }
+
+    public String chatAdvisor(String query) {
+        return this.chatClient
+                .prompt()
+                .system(system -> system.text(this.systemMessage))
+                .user(user -> user.text(this.userMessage)
+                        .param("concept", query))
                 .call()
                 .content();
     }
