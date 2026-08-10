@@ -10,13 +10,17 @@ import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.spring.ai.firstproject.advisors.TokenPrintAdvisor;
+
 @Configuration
 public class AiConfig {
 
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
         return builder
-                .defaultAdvisors(new SimpleLoggerAdvisor(), new SafeGuardAdvisor(List.of("game")))
+                // new SimpleLoggerAdvisor()
+                .defaultAdvisors(new TokenPrintAdvisor(),
+                        new SafeGuardAdvisor(List.of("game")))
                 .defaultSystem("You are a helpful coding assistant, You are the expert in coding")
                 .defaultOptions(OpenAiChatOptions.builder()
                         .model("openai/gpt-oss-20b:free")
