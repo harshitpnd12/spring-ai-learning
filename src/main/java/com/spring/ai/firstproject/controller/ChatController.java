@@ -14,6 +14,8 @@ import com.spring.ai.firstproject.entity.Tut;
 import com.spring.ai.firstproject.service.ChatService;
 import com.spring.ai.firstproject.service.ChatServiceImpl;
 
+import reactor.core.publisher.Flux;
+
 @RestController
 @RequestMapping
 public class ChatController {
@@ -70,5 +72,10 @@ public class ChatController {
     @GetMapping("/chatadvisor")
     public ResponseEntity<String> chatAdvisor(@RequestParam(value = "q", required = true) String q) {
         return ResponseEntity.ok(chatService.chatAdvisor(q));
+    }
+
+    @GetMapping("/stream-chat")
+    public ResponseEntity<Flux<String>> streamChat(@RequestParam("q") String query) {
+        return ResponseEntity.ok(chatService.streamChat(query));
     }
 }

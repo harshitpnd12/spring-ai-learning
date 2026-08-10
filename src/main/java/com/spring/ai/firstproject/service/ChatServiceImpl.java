@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.spring.ai.firstproject.entity.Tut;
 
+import reactor.core.publisher.Flux;
+
 @Service
 public class ChatServiceImpl implements ChatService {
 
@@ -165,6 +167,17 @@ public class ChatServiceImpl implements ChatService {
                 .user(user -> user.text(this.userMessage)
                         .param("concept", query))
                 .call()
+                .content();
+    }
+
+    @Override
+    public Flux<String> streamChat(String query) {
+        return this.chatClient
+                .prompt()
+                .system(system -> system.text(this.systemMessage))
+                .user(user -> user.text(this.userMessage)
+                        .param("concept", query))
+                .stream()
                 .content();
     }
 
